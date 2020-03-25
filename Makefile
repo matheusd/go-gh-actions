@@ -3,9 +3,9 @@ LOG_TAGS =
 TEST_FLAGS =
 
 GOTEST := GO111MODULE=on go test -v
-GOLIST := go list $(PKG)/...
+GOLIST := go list ./...
 
-UNIT_RACE := xargs -I{} sh -c '$(GOTEST) -tags="$(DEV_TAGS) $(LOG_TAGS)" $(TEST_FLAGS) -race -gcflags=all=-d=checkptr=0 {} || exit 255' <<< `$(GOLIST)`
+UNIT_RACE := $(GOLIST) | xargs -I{} sh -c '$(GOTEST) -tags="$(DEV_TAGS) $(LOG_TAGS)" $(TEST_FLAGS) -race -gcflags=all=-d=checkptr=0 {} || exit 255'
 
 unit-race:
 	@$(call print, "Running unit race tests.")
